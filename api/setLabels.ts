@@ -1,10 +1,7 @@
 import * as github from '@actions/github';
 import { getRepo, getIssueNumber, getPrNumber } from './api';
 
-export const setIssueLabel = async (
-    token: string,
-    matchingKeywords: { keywords: string[]; labels: string[]; assignees: string[] }[]
-) => {
+export const setIssueLabel = async (token: string, matchingKeywords: { keywords: string[]; labels: string[] }[]) => {
     const octokit = new github.GitHub(token);
 
     let issue_number;
