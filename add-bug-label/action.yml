@@ -1,11 +1,11 @@
-name: "Issue Auto Labeling and Assigning"
+name: "Issue Auto Labeling"
 description: "trigger an action based on issue content"
 inputs:
   github-token:
     description: "Github token"
     required: true
   parameters:
-    description: "JSON array of keywords to look for and labels and assignees to be set when there's a keyword match"
+    description: "JSON array of keywords to look for and labels to be set when there's a keyword match"
     required: true
 
 outputs:

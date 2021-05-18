@@ -1,6 +1,6 @@
 import * as core from '@actions/core';
-import { getIssueContent } from '../api/getIssue';
-import { setIssueLabel } from '../api/setLabels';
+import { GitHubRepository } from '../api/GitHub';
+import { Labels } from '../api/Labels';
 
 const checkKeywords = (
     parameters: { keywords: string[]; labels: string[] }[],
@@ -33,7 +33,7 @@ async function run() {
         core.setOutput('labeled', false.toString());
         core.setOutput('assigned', false.toString());
         const token = core.getInput('github-token');
-        const issueContent = await getIssueContent(token);
+        const issueContent = await GitHubRepository.getIssueContent(token);
         const parameters: { keywords: string[]; labels: string[] }[] = JSON.parse(
             core.getInput('parameters', { required: true })
         );
@@ -49,7 +49,7 @@ async function run() {
             console.log('Keywords not included in this issue');
             return;
         }
-        setIssueLabel(token, matchingKeywords); // Adds a label when a specific title is added.
+        Labels.setIssueLabelOnKeyword(token, matchingKeywords); // Adds a label when a specific title is added.
         core.setOutput('labeled', true.toString());
     } catch (error) {
         core.setFailed(error.message);

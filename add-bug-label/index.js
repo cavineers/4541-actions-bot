@@ -10,8 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = require("@actions/core");
-const getIssue_1 = require("../api/getIssue");
-const setLabels_1 = require("../api/setLabels");
+const GitHub_1 = require("../api/GitHub");
+const Labels_1 = require("../api/Labels");
 const checkKeywords = (parameters, content) => {
     console.log('issue title:', content);
     const matchingKeywords = [];
@@ -25,17 +25,13 @@ const checkKeywords = (parameters, content) => {
     }
     return null;
 };
-/**
- * Main execution of the entire system.
- * @returns The returned vals.
- */
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             core.setOutput('labeled', false.toString());
             core.setOutput('assigned', false.toString());
             const token = core.getInput('github-token');
-            const issueContent = yield getIssue_1.getIssueContent(token);
+            const issueContent = yield GitHub_1.GitHubRepository.getIssueContent(token);
             const parameters = JSON.parse(core.getInput('parameters', { required: true }));
             if (!parameters) {
                 core.setFailed(`No parameters were found. Make sure your ".yml" file contains a "parameters" JSON array like this:`);
@@ -45,7 +41,7 @@ function run() {
                 console.log('Keywords not included in this issue');
                 return;
             }
-            setLabels_1.setIssueLabel(token, matchingKeywords); // Adds a label when a specific title is added.
+            Labels_1.Labels.setIssueLabelOnKeyword(token, matchingKeywords);
             core.setOutput('labeled', true.toString());
         }
         catch (error) {
