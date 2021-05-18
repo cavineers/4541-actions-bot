@@ -35,4 +35,3 @@ const setIssueLabel = (token, matchingKeywords) => __awaiter(void 0, void 0, voi
         issue_number, labels: labels }));
 });
 exports.setIssueLabel = setIssueLabel;
-//# sourceMappingURL=setLabels.js.map

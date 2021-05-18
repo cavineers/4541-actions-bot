@@ -36,4 +36,3 @@ const setIssueAssignee = (token, matchingKeywords) => __awaiter(void 0, void 0, 
         assignees }));
 });
 exports.setIssueAssignee = setIssueAssignee;
-//# sourceMappingURL=setAssignees.js.map

@@ -20,7 +20,7 @@
     "homepage": "https://github.com/cavineers/4541-actions-bot#readme",
     "dependencies": {
         "@actions/core": "^1.2.7",
-        "@actions/github": "^2.1.1"
+        "@actions/github": "^2.2.0"
     },
     "devDependencies": {
         "@types/jest": "^26.0.23",

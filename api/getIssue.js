@@ -33,4 +33,3 @@ const getIssueContent = (token) => __awaiter(void 0, void 0, void 0, function* (
     };
 });
 exports.getIssueContent = getIssueContent;
-//# sourceMappingURL=getIssue.js.map
