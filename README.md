@@ -23,3 +23,9 @@ steps:
           parameters: '[ACTION PARAMETERS]'
           github-token: "${{ secrets.GITHUB_TOKEN }}"
 ```
+
+## Further Documentation
+
+All contributions to this repository AND any that use these workflows should follow the [CONTRIBUTING.md](CONTRIBUTING.md) documentations and styles.
+
+A list of the completed workflows can be found in the [WORKFLOWS.md](WORKFLOWS.md) file.
