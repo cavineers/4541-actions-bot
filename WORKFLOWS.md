@@ -20,6 +20,6 @@ steps:
       - name: Run Action
         uses: ./actions/auto-add-labels
         with:
-          parameters: '[ {"keywords": ["fix"], "labels": ["BUG"]}, {"keywords": ["feat"], "labels": ["ENHANCEMENT"]}, {"keywords": ["perf"], "labels": ["OPTIMIZATIONS"]}, {"keywords": ["deps"], "labels": ["DEPENDENCIES"]}, {"keywords": ["test"], "labels": ["TESTING"]}, {"keywords": ["ci"], "labels": ["DEPENDENCIES"]}, {"keywords": ["docs"], "labels": ["DOCUMENTATION"]}'
+          parameters: '[ {"keywords": ["fix"], "labels": ["BUG"]}, {"keywords": ["feat"], "labels": ["ENHANCEMENT"]}, {"keywords": ["perf"], "labels": ["OPTIMIZATIONS"]}, {"keywords": ["deps"], "labels": ["DEPENDENCIES"]}, {"keywords": ["test"], "labels": ["TESTING"]}, {"keywords": ["ci"], "labels": ["DEPENDENCIES"]}, {"keywords": ["docs"], "labels": ["DOCUMENTATION"]} ]'
           github-token: "${{ secrets.GITHUB_TOKEN }}"
 ```
