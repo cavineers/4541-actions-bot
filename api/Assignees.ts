@@ -3,7 +3,7 @@ import { GitHubRepository } from './GitHub';
 
 export class Assignees extends GitHubRepository {
     /**
-     * Sets contributors to issues.
+     * Sets contributors to issues or pull requests.
      * @param token GitHub secret token.
      * @param assignees Array of contributors to be assigned to the issue or PR.
      */

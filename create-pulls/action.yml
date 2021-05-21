@@ -1,0 +1,34 @@
+name: "Creates a new pull request"
+description: "trigger an action based on issue content"
+
+inputs:
+  title:
+    description: "Pull Request title"
+    required: true
+    default: "Update from 'Create or Update Request' action"
+  body:
+    description: "Pull Request body"
+    required: true
+    default: "Pull Request Content"
+  branch:
+    description: "Branch name"
+    required: true
+    default: create-or-update-pull-request-action
+  author:
+    description: Commit author name & email address. Must be in the form "Name <email@domain.com>"
+    required: true
+    default: "Create or Update Pull Request Action <create-or-update-pull-request@users.noreply.github.com>"
+  commit-message:
+    description: Commit message for all uncommited changes.
+    required: true
+    default: Update from 'Create or Update Request' action
+  path:
+    required: false
+    description: Commit selected files only by providing a path. It is used in `git add "<path>"`
+    
+runs:
+  using: "node12"
+  main: "index.js"
+branding:
+  icon: alert-circle
+  color: gray-dark

@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GitHubRepository = void 0;
 const github = require("@actions/github");
+const request_1 = require("@octokit/request");
 class GitHubRepository {
     static getIssueContent(token) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -34,6 +35,7 @@ class GitHubRepository {
     }
 }
 exports.GitHubRepository = GitHubRepository;
+GitHubRepository.request = request_1.request;
 GitHubRepository.getPrNumber = () => {
     const pullRequest = github.context.payload.pull_request;
     if (!pullRequest) {
