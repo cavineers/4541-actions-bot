@@ -1,4 +1,6 @@
+import * as core from '@actions/core';
 import * as github from '@actions/github';
+import * as path from 'path';
 
 export class GitHubRepository {
     /**
@@ -66,4 +68,77 @@ export class GitHubRepository {
         const { repo } = github.context;
         return repo;
     };
+
+    /**
+     * Gets the repo details.
+     * @param remoteUrl Repository URL
+     * @returns Repository Details
+     */
+    public static getRemoteDetail(remoteUrl: string) {
+        const githubUrl = process.env.GITHUB_SERVER_URL || 'https://github.com';
+
+        const githubServerMatch = githubUrl.match(/^https?:\/\/(.+)$/i);
+        if (!githubServerMatch) {
+            throw new Error('Could not parse GitHub Server name');
+        }
+
+        const httpsUrlPattern = new RegExp(`^https?://.*@?${githubServerMatch[1]}/(.+/.+)$`, 'i');
+        const sshUrlPattern = new RegExp(`^git@${githubServerMatch[1]}:(.+/.+).git$`, 'i');
+
+        const httpsMatch = remoteUrl.match(httpsUrlPattern);
+        if (httpsMatch) {
+            return {
+                protocol: 'HTTPS',
+                repository: httpsMatch[1],
+            };
+        }
+
+        const sshMatch = remoteUrl.match(sshUrlPattern);
+        if (sshMatch) {
+            return {
+                protocol: 'SSH',
+                repository: sshMatch[1],
+            };
+        }
+
+        throw new Error(`The format of '${remoteUrl}' is not a valid GitHub repository URL`);
+    }
+
+    /**
+     * Gets the requested repository URL.
+     * @param protocol Proc Type
+     * @param repository Repository Name
+     * @returns Repository URL
+     */
+    public static getRemoteUrl(protocol: string, repository: string): string {
+        return protocol === 'HTTPS' ? `https://github.com/${repository}` : `git@github.com:${repository}.git`;
+    }
+
+    /**
+     * Creates new random ID.
+     * @returns Random ID.
+     */
+    public static randomString(): string {
+        return Math.random().toString(36).substr(2, 7);
+    }
+
+    /**
+     * Gets the relative path of the repository.
+     * @param relativePath Relative path.
+     * @returns The path to the repo.
+     */
+    public static getRepoPath(relativePath?: string): string {
+        let githubWorkspacePath = process.env.GITHUB_WORKSPACE;
+        if (!githubWorkspacePath) {
+            throw new Error('GITHUB_WORKSPACE not defined');
+        }
+        githubWorkspacePath = path.resolve(githubWorkspacePath);
+        core.debug(`githubWorkspacePath: ${githubWorkspacePath}`);
+
+        let repoPath = githubWorkspacePath;
+        if (relativePath) repoPath = path.resolve(repoPath, relativePath);
+
+        core.debug(`repoPath: ${repoPath}`);
+        return repoPath;
+    }
 }
