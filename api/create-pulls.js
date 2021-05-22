@@ -26,7 +26,7 @@ class PullRequests {
 exports.PullRequests = PullRequests;
 PullRequests.request = defaults({
     headers: {
-        authorization: `token ${core.getInput('github-token')}`,
+        authorization: `token ${process.env.GITHUB_TOKEN}`,
     },
 });
 PullRequests.inputs = {

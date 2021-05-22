@@ -10,7 +10,7 @@ const {
 export class PullRequests {
     private static request = defaults({
         headers: {
-            authorization: `token ${core.getInput('github-token')}`,
+            authorization: `token ${process.env.GITHUB_TOKEN}`,
         },
     });
 
