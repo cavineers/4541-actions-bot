@@ -12,6 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GitHubRepository = void 0;
 const github = require("@actions/github");
 class GitHubRepository {
+    constructor(token) {
+        this.octokit = new github.GitHub(token);
+    }
     static getIssueContent(token) {
         return __awaiter(this, void 0, void 0, function* () {
             const octokit = new github.GitHub(token);

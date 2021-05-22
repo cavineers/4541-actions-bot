@@ -1,6 +1,12 @@
 import * as github from '@actions/github';
 
 export class GitHubRepository {
+    public octokit;
+
+    constructor(token: string) {
+        this.octokit = new github.GitHub(token);
+    }
+
     /**
      * When referencing a GitHub pull request in an action
      * this method returns the pull request's GitHub number.
