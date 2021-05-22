@@ -17,7 +17,7 @@ inputs:
   author:
     description: Commit author name & email address. Must be in the form "Name <email@domain.com>"
     required: true
-    default: "Create or Update Pull Request Action <create-or-update-pull-request@users.noreply.github.com>"
+    default: "Unknown"
   commit-message:
     description: Commit message for all uncommited changes.
     required: true
@@ -25,7 +25,10 @@ inputs:
   path:
     required: false
     description: Commit selected files only by providing a path. It is used in `git add "<path>"`
-    
+  github-token:
+    description: "Github token"
+    required: true
+
 runs:
   using: "node12"
   main: "index.js"
