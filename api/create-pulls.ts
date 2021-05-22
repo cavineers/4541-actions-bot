@@ -1,9 +1,19 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import * as github from '@actions/github';
 import * as core from '@actions/core';
 import { GitHubRepository } from './GitHub';
-import { request } from '@octokit/request';
+
+const {
+    request: { defaults },
+} = require('@octokit/request');
 
 export class PullRequests {
+    private static request = defaults({
+        headers: {
+            authorization: `token ${core.getInput('github-token')}`,
+        },
+    });
+
     private static inputs = {
         title: core.getInput('title'),
         body: core.getInput('body'),
@@ -14,25 +24,19 @@ export class PullRequests {
     };
 
     public static async createNewPullRequest() {
-        const default_branch = await request(`GET /repos/{owner}/{repo}`, {
+        const default_branch = await this.request(`GET /repos/{owner}/{repo}`, {
             ...GitHubRepository.getRepo(),
-        }).catch((error) => {
-            console.error(error);
-            core.error(error);
         });
 
         const DEFAULT_BRANCH = default_branch;
 
         core.debug('Creating pull request');
-        const pullReq = await request(`POST /repos/{owner}/{repo}/pulls`, {
+        const pullReq = await this.request(`POST /repos/{owner}/{repo}/pulls`, {
             ...GitHubRepository.getRepo(),
             title: this.inputs.title,
             body: this.inputs.body,
             head: this.inputs.branch,
             base: DEFAULT_BRANCH,
-        }).catch((error) => {
-            console.error(error);
-            core.error(error);
         });
     }
 }
