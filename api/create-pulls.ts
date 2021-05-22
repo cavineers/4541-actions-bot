@@ -14,23 +14,25 @@ export class PullRequests {
     };
 
     public static async createNewPullRequest() {
-        const {
-            data: { default_branch },
-        } = await request(`GET /repos/{owner}/{repo}`, {
+        const default_branch = await request(`GET /repos/{owner}/{repo}`, {
             ...GitHubRepository.getRepo(),
+        }).catch((error) => {
+            console.error(error);
+            core.error(error);
         });
 
         const DEFAULT_BRANCH = default_branch;
 
         core.debug('Creating pull request');
-        const {
-            data: { html_url, number },
-        } = await request(`POST /repos/{owner}/{repo}/pulls`, {
+        const pullReq = await request(`POST /repos/{owner}/{repo}/pulls`, {
             ...GitHubRepository.getRepo(),
             title: this.inputs.title,
             body: this.inputs.body,
             head: this.inputs.branch,
             base: DEFAULT_BRANCH,
+        }).catch((error) => {
+            console.error(error);
+            core.error(error);
         });
     }
 }

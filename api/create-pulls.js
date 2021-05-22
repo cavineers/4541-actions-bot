@@ -12,13 +12,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PullRequests = void 0;
 const core = require("@actions/core");
 const GitHub_1 = require("./GitHub");
+const request_1 = require("@octokit/request");
 class PullRequests {
     static createNewPullRequest() {
         return __awaiter(this, void 0, void 0, function* () {
-            const { data: { default_branch }, } = yield GitHub_1.GitHubRepository.request(`GET /repos/{owner}/{repo}`, Object.assign({}, GitHub_1.GitHubRepository.getRepo()));
+            const default_branch = yield request_1.request(`GET /repos/{owner}/{repo}`, Object.assign({}, GitHub_1.GitHubRepository.getRepo())).catch((error) => {
+                console.error(error);
+                core.error(error);
+            });
             const DEFAULT_BRANCH = default_branch;
             core.debug('Creating pull request');
-            const { data: { html_url, number }, } = yield GitHub_1.GitHubRepository.request(`POST /repos/{owner}/{repo}/pulls`, Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { title: this.inputs.title, body: this.inputs.body, head: this.inputs.branch, base: DEFAULT_BRANCH }));
+            const pullReq = yield request_1.request(`POST /repos/{owner}/{repo}/pulls`, Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { title: this.inputs.title, body: this.inputs.body, head: this.inputs.branch, base: DEFAULT_BRANCH })).catch((error) => {
+                console.error(error);
+                core.error(error);
+            });
         });
     }
 }
