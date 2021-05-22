@@ -28,17 +28,16 @@ export class PullRequests {
         // const DEFAULT_BRANCH = default_branch;
 
         core.debug('Creating pull request');
-        const pullReq = await this.GitHub.octokit
-            .request(`POST /repos/{owner}/{repo}/pulls`, {
-                ...GitHubRepository.getRepo(),
-                title: this.inputs.title,
-                body: this.inputs.body,
-                head: this.inputs.branch,
-                base: 'development',
-            })
-            .catch((error: any) => {
-                console.error(error);
-                core.error(error);
-            });
+        const {
+            data: { html_url, number },
+        } = await this.GitHub.octokit.request(`POST /repos/{owner}/{repo}/pulls`, {
+            ...GitHubRepository.getRepo(),
+            title: this.inputs.title,
+            body: this.inputs.body,
+            head: this.inputs.branch,
+            base: 'development',
+        });
+        console.log(`Pull request created: ${html_url} (#${number})`);
+        core.info(`Pull request created: ${html_url} (#${number})`);
     }
 }
