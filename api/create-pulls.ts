@@ -16,16 +16,16 @@ export class PullRequests {
     };
 
     public static async createNewPullRequest() {
-        const default_branch = await this.GitHub.octokit
-            .request(`GET /repos/{owner}/{repo}`, {
-                ...GitHubRepository.getRepo(),
-            })
-            .catch((error: any) => {
-                console.error(error);
-                core.error(error);
-            });
+        // const default_branch = await this.GitHub.octokit
+        //     .request(`GET /repos/{owner}/{repo}`, {
+        //         ...GitHubRepository.getRepo(),
+        //     })
+        //     .catch((error: any) => {
+        //         console.error(error);
+        //         core.error(error);
+        //     });
 
-        const DEFAULT_BRANCH = default_branch;
+        // const DEFAULT_BRANCH = default_branch;
 
         core.debug('Creating pull request');
         const pullReq = await this.GitHub.octokit
@@ -34,7 +34,7 @@ export class PullRequests {
                 title: this.inputs.title,
                 body: this.inputs.body,
                 head: this.inputs.branch,
-                base: DEFAULT_BRANCH,
+                base: 'development',
             })
             .catch((error: any) => {
                 console.error(error);
