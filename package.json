@@ -21,7 +21,7 @@
     "dependencies": {
         "@actions/core": "^1.2.7",
         "@actions/github": "^2.2.0",
-        "@octokit/request": "^5.4.15"
+        "@octokit/request": "^5.1.0"
     },
     "devDependencies": {
         "@types/jest": "^26.0.23",

@@ -1,6 +1,7 @@
 import * as github from '@actions/github';
 import * as core from '@actions/core';
 import { GitHubRepository } from './GitHub';
+import { request } from '@octokit/request';
 
 export class PullRequests {
     private static inputs = {
@@ -15,7 +16,7 @@ export class PullRequests {
     public static async createNewPullRequest() {
         const {
             data: { default_branch },
-        } = await GitHubRepository.request(`GET /repos/{owner}/{repo}`, {
+        } = await request(`GET /repos/{owner}/{repo}`, {
             ...GitHubRepository.getRepo(),
         });
 
@@ -24,7 +25,7 @@ export class PullRequests {
         core.debug('Creating pull request');
         const {
             data: { html_url, number },
-        } = await GitHubRepository.request(`POST /repos/{owner}/{repo}/pulls`, {
+        } = await request(`POST /repos/{owner}/{repo}/pulls`, {
             ...GitHubRepository.getRepo(),
             title: this.inputs.title,
             body: this.inputs.body,

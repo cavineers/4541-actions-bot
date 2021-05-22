@@ -1,10 +1,6 @@
-import * as core from '@actions/core';
 import * as github from '@actions/github';
-import { request } from '@octokit/request';
 
 export class GitHubRepository {
-    public static request = request;
-
     /**
      * When referencing a GitHub pull request in an action
      * this method returns the pull request's GitHub number.
