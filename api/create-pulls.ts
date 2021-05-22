@@ -5,12 +5,12 @@ import { GitHubRepository } from './GitHub';
 
 const {
     request: { defaults },
-} = require('@octokit/request');
+  } = require("@octokit/request");
 
 export class PullRequests {
     private static request = defaults({
         headers: {
-            authorization: `token ${process.env.GITHUB_TOKEN}`,
+            authorization: `token ${core.getInput('github-token')}`,
         },
     });
 
@@ -26,6 +26,9 @@ export class PullRequests {
     public static async createNewPullRequest() {
         const default_branch = await this.request(`GET /repos/{owner}/{repo}`, {
             ...GitHubRepository.getRepo(),
+        }).catch((error: any) => {
+            console.error(error);
+            core.error(error);
         });
 
         const DEFAULT_BRANCH = default_branch;
@@ -37,6 +40,9 @@ export class PullRequests {
             body: this.inputs.body,
             head: this.inputs.branch,
             base: DEFAULT_BRANCH,
+        }).catch((error: any) => {
+            console.error(error);
+            core.error(error);
         });
     }
 }
