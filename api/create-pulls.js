@@ -15,13 +15,17 @@ const GitHub_1 = require("./GitHub");
 class PullRequests {
     static createNewPullRequest() {
         return __awaiter(this, void 0, void 0, function* () {
-            core.debug('Creating pull request');
-            const pullReq = yield this.GitHub.octokit
-                .request(`POST /repos/{owner}/{repo}/pulls`, Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { title: this.inputs.title, body: this.inputs.body, head: this.inputs.branch, base: 'development' }))
+            const default_branch = yield this.GitHub.octokit
+                .request(`GET /repos/{owner}/{repo}`, Object.assign({}, GitHub_1.GitHubRepository.getRepo()))
                 .catch((error) => {
                 console.error(error);
                 core.error(error);
             });
+            const DEFAULT_BRANCH = default_branch;
+            core.debug('Creating pull request');
+            const { data: { html_url, number }, } = yield this.GitHub.octokit.request(`POST /repos/{owner}/{repo}/pulls`, Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { title: this.inputs.title, body: this.inputs.body, head: this.inputs.branch, base: DEFAULT_BRANCH }));
+            console.log(`Pull request created: ${html_url} (#${number})`);
+            core.info(`Pull request created: ${html_url} (#${number})`);
         });
     }
 }

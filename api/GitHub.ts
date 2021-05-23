@@ -8,6 +8,17 @@ export class GitHubRepository {
     }
 
     /**
+     * Gets the languages of the given repo.
+     * @returns Returns the number of bytes written per language.
+     */
+    public async getRepoLanguages() {
+        const languages = await this.octokit.request('GET /repos/{owner}/{repo}/languages', {
+            ...GitHubRepository.getRepo(),
+        });
+        return languages;
+    }
+
+    /**
      * When referencing a GitHub pull request in an action
      * this method returns the pull request's GitHub number.
      * @returns The GitHub PullRequest Number.
@@ -72,4 +83,19 @@ export class GitHubRepository {
         const { repo } = github.context;
         return repo;
     };
+
+    public static async getMainSHA(token: string) {
+        const octokit = new github.GitHub(token);
+
+        const default_branch = await octokit.request(`GET /repos/{owner}/{repo}`, {
+            ...GitHubRepository.getRepo(),
+        });
+
+        const DEFAULT_BRANCH = default_branch;
+
+        const shaObject = await octokit.request('GET /repos/{owner}/{repo}/git/ref/{ref}', {
+            ...GitHubRepository.getRepo(),
+            ref: DEFAULT_BRANCH,
+        });
+    }
 }
