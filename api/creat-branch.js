@@ -35,7 +35,7 @@ class Branches {
                 console.error(error);
                 core.error(error);
             });
-            const { repositoryTree: { sha }, } = yield this.GitHub.octokit
+            const { data: { sha }, } = yield this.GitHub.octokit
                 .request('GET /repos/{owner}/{repo}/git/trees/{tree_sha}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { tree_sha: object.sha }))
                 .catch((error) => {
                 console.error(error);

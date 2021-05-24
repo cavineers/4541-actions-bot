@@ -51,7 +51,7 @@ export class Branches {
 
         const {
             // @ts-ignore
-            repositoryTree: { sha },
+            data: { sha },
         } = await this.GitHub.octokit
             .request('GET /repos/{owner}/{repo}/git/trees/{tree_sha}', {
                 ...GitHubRepository.getRepo(),
