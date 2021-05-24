@@ -30,6 +30,7 @@ export class Branches {
             })
             .then(() => {
                 const DEFAULT_BRANCH = default_branch;
+                console.log(DEFAULT_BRANCH);
                 return this.GitHub.octokit.request('GET /repos/{owner}/{repo}/git/ref/{ref}', {
                     ...GitHubRepository.getRepo(),
                     ref: DEFAULT_BRANCH,

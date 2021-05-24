@@ -26,6 +26,7 @@ class Branches {
             .request(`GET /repos/{owner}/{repo}`, Object.assign({}, GitHub_1.GitHubRepository.getRepo()))
             .then(() => {
             const DEFAULT_BRANCH = default_branch;
+            console.log(DEFAULT_BRANCH);
             return this.GitHub.octokit.request('GET /repos/{owner}/{repo}/git/ref/{ref}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { ref: DEFAULT_BRANCH }));
         })
             .catch((error) => {
