@@ -37,15 +37,15 @@ class Branches {
                 core.error(error);
             });
             console.log(object);
-            const { data: { sha }, } = yield this.GitHub.octokit
+            const { data: { tree }, } = yield this.GitHub.octokit
                 .request('GET /repos/{owner}/{repo}/git/trees/{tree_sha}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { tree_sha: object.sha }))
                 .catch((error) => {
                 console.error(error);
                 core.error(error);
             });
-            console.log(sha);
+            console.log(tree);
             const msg = yield this.GitHub.octokit
-                .request(`POST /repos/{owner}/{repo}/git/commits`, Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { message: message, tree: sha }))
+                .request(`POST /repos/{owner}/{repo}/git/commits`, Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { message: message, tree: tree.sha }))
                 .catch((error) => {
                 console.error(error);
                 core.error(error);

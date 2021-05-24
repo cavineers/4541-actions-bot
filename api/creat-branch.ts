@@ -54,7 +54,7 @@ export class Branches {
 
         const {
             // @ts-ignore
-            data: { sha },
+            data: { tree },
         } = await this.GitHub.octokit
             .request('GET /repos/{owner}/{repo}/git/trees/{tree_sha}', {
                 ...GitHubRepository.getRepo(),
@@ -65,13 +65,13 @@ export class Branches {
                 core.error(error);
             });
 
-        console.log(sha);
+        console.log(tree);
 
         const msg = await this.GitHub.octokit
             .request(`POST /repos/{owner}/{repo}/git/commits`, {
                 ...GitHubRepository.getRepo(),
                 message: message,
-                tree: sha,
+                tree: tree.sha,
             })
             .catch((error: any) => {
                 console.error(error);
