@@ -29,23 +29,21 @@ class Branches {
                 console.error(error);
                 core.error(error);
             });
-            core.debug('Creating pull request');
             const { data: { object }, } = yield this.GitHub.octokit
                 .request('GET /repos/{owner}/{repo}/git/ref/{ref}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { ref: `heads/${default_branch}` }))
                 .catch((error) => {
                 console.error(error);
                 core.error(error);
             });
-            console.log(object);
-            const { data: { tree }, } = yield this.GitHub.octokit
+            const { repositoryTree: { sha }, } = yield this.GitHub.octokit
                 .request('GET /repos/{owner}/{repo}/git/trees/{tree_sha}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { tree_sha: object.sha }))
                 .catch((error) => {
                 console.error(error);
                 core.error(error);
             });
-            console.log(tree);
+            console.log(sha);
             const msg = yield this.GitHub.octokit
-                .request(`POST /repos/{owner}/{repo}/git/commits`, Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { message: message, tree: tree.sha }))
+                .request(`POST /repos/{owner}/{repo}/git/commits`, Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { message: message, tree: sha }))
                 .catch((error) => {
                 console.error(error);
                 core.error(error);

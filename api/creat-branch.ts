@@ -36,7 +36,6 @@ export class Branches {
                 core.error(error);
             });
 
-        core.debug('Creating pull request');
         const {
             // @ts-ignore
             data: { object },
@@ -50,11 +49,9 @@ export class Branches {
                 core.error(error);
             });
 
-        console.log(object);
-
         const {
             // @ts-ignore
-            data: { tree },
+            repositoryTree: { sha },
         } = await this.GitHub.octokit
             .request('GET /repos/{owner}/{repo}/git/trees/{tree_sha}', {
                 ...GitHubRepository.getRepo(),
@@ -65,13 +62,13 @@ export class Branches {
                 core.error(error);
             });
 
-        console.log(tree);
+        console.log(sha);
 
         const msg = await this.GitHub.octokit
             .request(`POST /repos/{owner}/{repo}/git/commits`, {
                 ...GitHubRepository.getRepo(),
                 message: message,
-                tree: tree.sha,
+                tree: sha,
             })
             .catch((error: any) => {
                 console.error(error);
