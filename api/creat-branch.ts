@@ -17,6 +17,19 @@ export class Branches {
             ref: data.ref,
             sha: data.sha,
         });
+
+        // Point new commit to reference.
+        await this.GitHub.octokit
+            .request('PATCH /repos/{owner}/{repo}/git/refs/{ref}', {
+                ...GitHubRepository.getRepo(),
+                ref: data.ref,
+                // @ts-ignore
+                sha: data.sha,
+            })
+            .catch((error: any) => {
+                console.error(error);
+                core.error(error);
+            });
     }
 
     public static async createNewCommit(message: string) {
@@ -94,21 +107,6 @@ export class Branches {
                 message: message,
                 tree: newTreeSHA,
                 parents: [lastCommitSHA],
-            })
-            .catch((error: any) => {
-                console.error(error);
-                core.error(error);
-            });
-
-        // @ts-ignore
-        console.log(newCommit.data.sha);
-        // Point new commit to reference.
-        await this.GitHub.octokit
-            .request('PATCH /repos/{owner}/{repo}/git/refs/{ref}', {
-                ...GitHubRepository.getRepo(),
-                ref: `heads/${default_branch}`,
-                // @ts-ignore
-                sha: newCommit.data.sha,
             })
             .catch((error: any) => {
                 console.error(error);

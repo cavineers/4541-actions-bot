@@ -17,6 +17,12 @@ class Branches {
         return __awaiter(this, void 0, void 0, function* () {
             core.debug('Creating new branch');
             const branch = yield this.GitHub.octokit.request(`POST /repos/{owner}/{repo}/git/refs`, Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { ref: data.ref, sha: data.sha }));
+            yield this.GitHub.octokit
+                .request('PATCH /repos/{owner}/{repo}/git/refs/{ref}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { ref: data.ref, sha: data.sha }))
+                .catch((error) => {
+                console.error(error);
+                core.error(error);
+            });
         });
     }
     static createNewCommit(message) {
@@ -56,13 +62,6 @@ class Branches {
             const newTreeSHA = sha;
             const newCommit = yield this.GitHub.octokit
                 .request(`POST /repos/{owner}/{repo}/git/commits`, Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { message: message, tree: newTreeSHA, parents: [lastCommitSHA] }))
-                .catch((error) => {
-                console.error(error);
-                core.error(error);
-            });
-            console.log(newCommit.data.sha);
-            yield this.GitHub.octokit
-                .request('PATCH /repos/{owner}/{repo}/git/refs/{ref}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { ref: `heads/${default_branch}`, sha: newCommit.data.sha }))
                 .catch((error) => {
                 console.error(error);
                 core.error(error);
