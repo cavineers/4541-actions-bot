@@ -22,6 +22,7 @@ Commit messages should follow the [Conventional Commits Specification](https://w
 - style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
 - test: Adding missing tests or correcting existing tests
 - transition: Update to new framework, style guide, or server model
+- secure: Updates to security systems
 
 ## Getting Help
 
