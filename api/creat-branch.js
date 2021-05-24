@@ -23,13 +23,18 @@ class Branches {
     }
     static createNewCommit(message) {
         return __awaiter(this, void 0, void 0, function* () {
-            const branch = yield this.GitHub.octokit
+            const { data: { default_branch }, } = yield this.GitHub.octokit
                 .request(`GET /repos/{owner}/{repo}`, Object.assign({}, GitHub_1.GitHubRepository.getRepo()))
                 .catch((error) => {
                 console.error(error);
                 core.error(error);
             });
-            console.log(branch);
+            const { data: { branch }, } = yield this.GitHub.octokit
+                .request('GET /repos/{owner}/{repo}/git/ref/{ref}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { ref: `refs/heads/${default_branch}` }))
+                .catch((error) => {
+                console.error(error);
+                core.error(error);
+            });
             const lastCommitSHA = branch.object.sha;
             const { data: { tree }, } = yield this.GitHub.octokit
                 .request('GET /repos/{owner}/{repo}/git/commits/{commit_sha}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { commit_sha: lastCommitSHA }))

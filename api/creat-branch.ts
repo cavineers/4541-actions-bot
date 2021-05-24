@@ -25,7 +25,10 @@ export class Branches {
 
     public static async createNewCommit(message: string) {
         // Retrieve data on entire repository.
-        const branch = await this.GitHub.octokit
+        const {
+            // @ts-ignore
+            data: { default_branch },
+        } = await this.GitHub.octokit
             .request(`GET /repos/{owner}/{repo}`, {
                 ...GitHubRepository.getRepo(),
             })
@@ -34,7 +37,18 @@ export class Branches {
                 core.error(error);
             });
 
-        console.log(branch)
+        const {
+            // @ts-ignore
+            data: { branch },
+        } = await this.GitHub.octokit
+            .request('GET /repos/{owner}/{repo}/git/ref/{ref}', {
+                ...GitHubRepository.getRepo(),
+                ref: `refs/heads/${default_branch}`,
+            })
+            .catch((error: any) => {
+                console.error(error);
+                core.error(error);
+            });
         const lastCommitSHA = branch.object.sha;
 
         // Get most recent commit on master.
