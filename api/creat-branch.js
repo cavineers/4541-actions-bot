@@ -29,13 +29,13 @@ class Branches {
                 console.error(error);
                 core.error(error);
             });
-            const { data: { branch }, } = yield this.GitHub.octokit
+            const { data: { object }, } = yield this.GitHub.octokit
                 .request('GET /repos/{owner}/{repo}/git/ref/{ref}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { ref: `heads/${default_branch}` }))
                 .catch((error) => {
                 console.error(error);
                 core.error(error);
             });
-            const lastCommitSHA = branch.object.sha;
+            const lastCommitSHA = object.sha;
             const { data: { tree }, } = yield this.GitHub.octokit
                 .request('GET /repos/{owner}/{repo}/git/commits/{commit_sha}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { commit_sha: lastCommitSHA }))
                 .catch((error) => {

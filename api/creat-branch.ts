@@ -39,7 +39,7 @@ export class Branches {
 
         const {
             // @ts-ignore
-            data: { branch },
+            data: { object },
         } = await this.GitHub.octokit
             .request('GET /repos/{owner}/{repo}/git/ref/{ref}', {
                 ...GitHubRepository.getRepo(),
@@ -49,7 +49,7 @@ export class Branches {
                 console.error(error);
                 core.error(error);
             });
-        const lastCommitSHA = branch.object.sha;
+        const lastCommitSHA = object.sha;
 
         // Get most recent commit on master.
         const {
