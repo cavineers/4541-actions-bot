@@ -23,38 +23,38 @@ export class Branches {
         core.info(`Branch created: ${html_url} (#${number})`);
     }
 
-    private static getHeadReference() {
-        const default_branch: any = this.GitHub.octokit
+    public static async createNewCommit(message: string) {
+        const default_branch = await this.GitHub.octokit
             .request(`GET /repos/{owner}/{repo}`, {
                 ...GitHubRepository.getRepo(),
-            })
-            .then(() => {
-                const DEFAULT_BRANCH = default_branch;
-                console.log(DEFAULT_BRANCH);
-                return this.GitHub.octokit.request('GET /repos/{owner}/{repo}/git/ref/{ref}', {
-                    ...GitHubRepository.getRepo(),
-                    ref: DEFAULT_BRANCH,
-                });
             })
             .catch((error: any) => {
                 console.error(error);
                 core.error(error);
             });
-    }
 
-    public static async createNewCommit(data: string) {
-        const mainRef = await (<any>this.getHeadReference()).object.sha;
+        const DEFAULT_BRANCH = default_branch;
+
+        console.log(DEFAULT_BRANCH);
+
+        core.debug('Creating pull request');
+        const data = await this.GitHub.octokit.request('GET /repos/{owner}/{repo}/git/ref/{ref}', {
+            ...GitHubRepository.getRepo(),
+            ref: DEFAULT_BRANCH,
+        });
 
         const treeRef = await this.GitHub.octokit.request('GET /repos/{owner}/{repo}/git/trees/{tree_sha}', {
             ...GitHubRepository.getRepo(),
-            tree_sha: mainRef,
+            tree_sha: data,
         });
 
         const msg = await this.GitHub.octokit.request(`POST /repos/{owner}/{repo}/git/commits`, {
             ...GitHubRepository.getRepo(),
-            message: data,
+            message: message,
             tree: treeRef,
         });
-        return (<any>msg).sha;
+
+        // eslint-disable-next-line no-return-await
+        return await (<any>msg).sha;
     }
 }
