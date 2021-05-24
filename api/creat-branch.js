@@ -47,7 +47,7 @@ class Branches {
                 .request('POST /repos/{owner}/{repo}/git/trees', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { base_tree: lastTreeSHA, tree: [
                     {
                         mode: 100644,
-                        path: '/README.md',
+                        path: 'README.md',
                         content: 'hello',
                     },
                 ] }))

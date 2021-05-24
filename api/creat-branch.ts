@@ -79,7 +79,7 @@ export class Branches {
                     {
                         //! More params might be needed.
                         mode: 100644,
-                        path: '/README.md',
+                        path: 'README.md',
                         content: 'hello',
                     },
                 ],
