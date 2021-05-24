@@ -43,7 +43,7 @@ export class Branches {
         } = await this.GitHub.octokit
             .request('GET /repos/{owner}/{repo}/git/ref/{ref}', {
                 ...GitHubRepository.getRepo(),
-                ref: `refs/heads/${default_branch}`,
+                ref: `heads/${default_branch}`,
             })
             .catch((error: any) => {
                 console.error(error);

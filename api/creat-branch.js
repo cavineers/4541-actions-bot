@@ -30,7 +30,7 @@ class Branches {
                 core.error(error);
             });
             const { data: { branch }, } = yield this.GitHub.octokit
-                .request('GET /repos/{owner}/{repo}/git/ref/{ref}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { ref: `refs/heads/${default_branch}` }))
+                .request('GET /repos/{owner}/{repo}/git/ref/{ref}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { ref: `heads/${default_branch}` }))
                 .catch((error) => {
                 console.error(error);
                 core.error(error);
