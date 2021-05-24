@@ -15,8 +15,7 @@ const GitHub_1 = require("./GitHub");
 class Branches {
     static creatNewBranchReference(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            core.debug('Creating new branch');
-            const branch = yield this.GitHub.octokit.request(`POST /repos/{owner}/{repo}/git/refs`, Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { ref: data.ref, sha: data.sha }));
+            const branch = yield this.GitHub.octokit.request(`POST /repos/{owner}/{repo}/git/refs`, Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { ref: `refs/${data.ref}`, sha: data.sha }));
             yield this.GitHub.octokit
                 .request('PATCH /repos/{owner}/{repo}/git/refs/{ref}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { ref: data.ref, sha: data.sha }))
                 .catch((error) => {

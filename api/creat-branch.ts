@@ -11,10 +11,9 @@ export class Branches {
     private static GitHub = new GitHubRepository(core.getInput('github-token'));
 
     public static async creatNewBranchReference(data: branchParams) {
-        core.debug('Creating new branch');
         const branch = await this.GitHub.octokit.request(`POST /repos/{owner}/{repo}/git/refs`, {
             ...GitHubRepository.getRepo(),
-            ref: data.ref,
+            ref: `refs/${data.ref}`,
             sha: data.sha,
         });
 
@@ -23,7 +22,6 @@ export class Branches {
             .request('PATCH /repos/{owner}/{repo}/git/refs/{ref}', {
                 ...GitHubRepository.getRepo(),
                 ref: data.ref,
-                // @ts-ignore
                 sha: data.sha,
             })
             .catch((error: any) => {
