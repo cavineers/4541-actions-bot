@@ -23,7 +23,7 @@ class Branches {
     }
     static createNewCommit(message) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { data: { default_branch, branch }, } = yield this.GitHub.octokit
+            const branch = yield this.GitHub.octokit
                 .request(`GET /repos/{owner}/{repo}`, Object.assign({}, GitHub_1.GitHubRepository.getRepo()))
                 .catch((error) => {
                 console.error(error);

@@ -25,10 +25,7 @@ export class Branches {
 
     public static async createNewCommit(message: string) {
         // Retrieve data on entire repository.
-        const {
-            // @ts-ignore
-            data: { default_branch, branch },
-        } = await this.GitHub.octokit
+        const branch = await this.GitHub.octokit
             .request(`GET /repos/{owner}/{repo}`, {
                 ...GitHubRepository.getRepo(),
             })
