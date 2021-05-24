@@ -78,7 +78,7 @@ export class Branches {
                 tree: [
                     {
                         //! More params might be needed.
-                        mode: 100644,
+                        mode: '100644',
                         path: 'README.md',
                         content: 'hello',
                     },
