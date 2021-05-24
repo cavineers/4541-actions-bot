@@ -23,18 +23,32 @@ class Branches {
     }
     static createNewCommit(message) {
         return __awaiter(this, void 0, void 0, function* () {
-            const default_branch = yield this.GitHub.octokit
+            const { data: { default_branch }, } = yield this.GitHub.octokit
                 .request(`GET /repos/{owner}/{repo}`, Object.assign({}, GitHub_1.GitHubRepository.getRepo()))
                 .catch((error) => {
                 console.error(error);
                 core.error(error);
             });
-            const DEFAULT_BRANCH = default_branch;
-            console.log(DEFAULT_BRANCH);
+            console.log(default_branch);
             core.debug('Creating pull request');
-            const data = yield this.GitHub.octokit.request('GET /repos/{owner}/{repo}/git/ref/{ref}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { ref: DEFAULT_BRANCH }));
-            const treeRef = yield this.GitHub.octokit.request('GET /repos/{owner}/{repo}/git/trees/{tree_sha}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { tree_sha: data }));
-            const msg = yield this.GitHub.octokit.request(`POST /repos/{owner}/{repo}/git/commits`, Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { message: message, tree: treeRef }));
+            const data = yield this.GitHub.octokit
+                .request('GET /repos/{owner}/{repo}/git/ref/{ref}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { ref: default_branch }))
+                .catch((error) => {
+                console.error(error);
+                core.error(error);
+            });
+            const treeRef = yield this.GitHub.octokit
+                .request('GET /repos/{owner}/{repo}/git/trees/{tree_sha}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { tree_sha: data }))
+                .catch((error) => {
+                console.error(error);
+                core.error(error);
+            });
+            const msg = yield this.GitHub.octokit
+                .request(`POST /repos/{owner}/{repo}/git/commits`, Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { message: message, tree: treeRef }))
+                .catch((error) => {
+                console.error(error);
+                core.error(error);
+            });
             return yield msg.sha;
         });
     }

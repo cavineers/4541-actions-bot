@@ -24,7 +24,10 @@ export class Branches {
     }
 
     public static async createNewCommit(message: string) {
-        const default_branch = await this.GitHub.octokit
+        const {
+            // @ts-ignore
+            data: { default_branch },
+        } = await this.GitHub.octokit
             .request(`GET /repos/{owner}/{repo}`, {
                 ...GitHubRepository.getRepo(),
             })
@@ -33,26 +36,39 @@ export class Branches {
                 core.error(error);
             });
 
-        const DEFAULT_BRANCH = default_branch;
-
-        console.log(DEFAULT_BRANCH);
+        console.log(default_branch);
 
         core.debug('Creating pull request');
-        const data = await this.GitHub.octokit.request('GET /repos/{owner}/{repo}/git/ref/{ref}', {
-            ...GitHubRepository.getRepo(),
-            ref: DEFAULT_BRANCH,
-        });
+        const data = await this.GitHub.octokit
+            .request('GET /repos/{owner}/{repo}/git/ref/{ref}', {
+                ...GitHubRepository.getRepo(),
+                ref: default_branch,
+            })
+            .catch((error: any) => {
+                console.error(error);
+                core.error(error);
+            });
 
-        const treeRef = await this.GitHub.octokit.request('GET /repos/{owner}/{repo}/git/trees/{tree_sha}', {
-            ...GitHubRepository.getRepo(),
-            tree_sha: data,
-        });
+        const treeRef = await this.GitHub.octokit
+            .request('GET /repos/{owner}/{repo}/git/trees/{tree_sha}', {
+                ...GitHubRepository.getRepo(),
+                tree_sha: data,
+            })
+            .catch((error: any) => {
+                console.error(error);
+                core.error(error);
+            });
 
-        const msg = await this.GitHub.octokit.request(`POST /repos/{owner}/{repo}/git/commits`, {
-            ...GitHubRepository.getRepo(),
-            message: message,
-            tree: treeRef,
-        });
+        const msg = await this.GitHub.octokit
+            .request(`POST /repos/{owner}/{repo}/git/commits`, {
+                ...GitHubRepository.getRepo(),
+                message: message,
+                tree: treeRef,
+            })
+            .catch((error: any) => {
+                console.error(error);
+                core.error(error);
+            });
 
         // eslint-disable-next-line no-return-await
         return await (<any>msg).sha;
