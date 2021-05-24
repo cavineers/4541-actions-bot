@@ -29,22 +29,23 @@ class Branches {
                 console.error(error);
                 core.error(error);
             });
-            console.log(default_branch);
             core.debug('Creating pull request');
-            const data = yield this.GitHub.octokit
+            const { data: { object }, } = yield this.GitHub.octokit
                 .request('GET /repos/{owner}/{repo}/git/ref/{ref}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { ref: `heads/${default_branch}` }))
                 .catch((error) => {
                 console.error(error);
                 core.error(error);
             });
-            const treeRef = yield this.GitHub.octokit
-                .request('GET /repos/{owner}/{repo}/git/trees/{tree_sha}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { tree_sha: data }))
+            console.log(object);
+            const { data: { sha }, } = yield this.GitHub.octokit
+                .request('GET /repos/{owner}/{repo}/git/trees/{tree_sha}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { tree_sha: object.sha }))
                 .catch((error) => {
                 console.error(error);
                 core.error(error);
             });
+            console.log(sha);
             const msg = yield this.GitHub.octokit
-                .request(`POST /repos/{owner}/{repo}/git/commits`, Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { message: message, tree: treeRef }))
+                .request(`POST /repos/{owner}/{repo}/git/commits`, Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { message: message, tree: sha }))
                 .catch((error) => {
                 console.error(error);
                 core.error(error);
