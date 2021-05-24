@@ -12,15 +12,11 @@ export class Branches {
 
     public static async creatNewBranchReference(data: branchParams) {
         core.debug('Creating new branch');
-        const {
-            data: { html_url, number },
-        } = await this.GitHub.octokit.request(`POST /repos/{owner}/{repo}/git/refs`, {
+        const branch = await this.GitHub.octokit.request(`POST /repos/{owner}/{repo}/git/refs`, {
             ...GitHubRepository.getRepo(),
             ref: data.ref,
             sha: data.sha,
         });
-        console.log(`Branch created: ${html_url} (#${number})`);
-        core.info(`Branch created: ${html_url} (#${number})`);
     }
 
     public static async createNewCommit(message: string) {
@@ -119,7 +115,7 @@ export class Branches {
                 core.error(error);
             });
 
-        // eslint-disable-next-line no-return-await
-        return await (<any>newCommit).sha;
+        // @ts-ignore
+        return newCommit.data.sha;
     }
 }

@@ -16,9 +16,7 @@ class Branches {
     static creatNewBranchReference(data) {
         return __awaiter(this, void 0, void 0, function* () {
             core.debug('Creating new branch');
-            const { data: { html_url, number }, } = yield this.GitHub.octokit.request(`POST /repos/{owner}/{repo}/git/refs`, Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { ref: data.ref, sha: data.sha }));
-            console.log(`Branch created: ${html_url} (#${number})`);
-            core.info(`Branch created: ${html_url} (#${number})`);
+            const branch = yield this.GitHub.octokit.request(`POST /repos/{owner}/{repo}/git/refs`, Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { ref: data.ref, sha: data.sha }));
         });
     }
     static createNewCommit(message) {
@@ -69,7 +67,7 @@ class Branches {
                 console.error(error);
                 core.error(error);
             });
-            return yield newCommit.sha;
+            return newCommit.data.sha;
         });
     }
 }

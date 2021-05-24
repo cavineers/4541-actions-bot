@@ -19,7 +19,7 @@ async function run() {
 
         const commit = await Branches.createNewCommit(inputs.commitMessage);
         const branchParams = {
-            ref: `/refs/heads/${inputs.branch}`,
+            ref: `heads/${inputs.branch}`,
             sha: commit,
         };
 

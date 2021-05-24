@@ -25,7 +25,7 @@ function run() {
             };
             const commit = yield creat_branch_1.Branches.createNewCommit(inputs.commitMessage);
             const branchParams = {
-                ref: `/refs/heads/${inputs.branch}`,
+                ref: `heads/${inputs.branch}`,
                 sha: commit,
             };
             creat_branch_1.Branches.creatNewBranchReference(branchParams);
