@@ -83,19 +83,4 @@ export class GitHubRepository {
         const { repo } = github.context;
         return repo;
     };
-
-    public static async getMainSHA(token: string) {
-        const octokit = new github.GitHub(token);
-
-        const default_branch = await octokit.request(`GET /repos/{owner}/{repo}`, {
-            ...GitHubRepository.getRepo(),
-        });
-
-        const DEFAULT_BRANCH = default_branch;
-
-        const shaObject = await octokit.request('GET /repos/{owner}/{repo}/git/ref/{ref}', {
-            ...GitHubRepository.getRepo(),
-            ref: DEFAULT_BRANCH,
-        });
-    }
 }

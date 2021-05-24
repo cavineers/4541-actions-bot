@@ -10,12 +10,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = require("@actions/core");
-const create_pulls_1 = require("../api/create-pulls");
+const creat_branch_1 = require("../api/creat-branch");
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             core.setOutput('PullRequestBegin', 'Creating new request');
-            create_pulls_1.PullRequests.createNewPullRequest();
+            const inputs = {
+                title: core.getInput('title'),
+                body: core.getInput('body'),
+                branch: core.getInput('branch').replace(/^refs\/heads\//, ''),
+                path: core.getInput('path'),
+                commitMessage: core.getInput('commit-message'),
+                author: core.getInput('author'),
+            };
+            const commit = yield creat_branch_1.Branches.createNewCommit(inputs.commitMessage);
+            const branchParams = {
+                ref: `heads/${inputs.branch}`,
+                sha: commit,
+            };
+            creat_branch_1.Branches.creatNewBranchReference(branchParams);
             core.setOutput('Finished', 'Finished creating new request');
         }
         catch (error) {

@@ -19,7 +19,7 @@ inputs:
     required: true
     default: "Unknown"
   commit-message:
-    description: Commit message for all uncommited changes.
+    description: Commit message for all uncommitted changes.
     required: true
     default: Update from 'Create or Update Request' action
   path:

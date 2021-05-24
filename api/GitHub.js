@@ -41,14 +41,6 @@ class GitHubRepository {
             };
         });
     }
-    static getMainSHA(token) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const octokit = new github.GitHub(token);
-            const default_branch = yield octokit.request(`GET /repos/{owner}/{repo}`, Object.assign({}, GitHubRepository.getRepo()));
-            const DEFAULT_BRANCH = default_branch;
-            const shaObject = yield octokit.request('GET /repos/{owner}/{repo}/git/ref/{ref}', Object.assign(Object.assign({}, GitHubRepository.getRepo()), { ref: DEFAULT_BRANCH }));
-        });
-    }
 }
 exports.GitHubRepository = GitHubRepository;
 GitHubRepository.getPrNumber = () => {
