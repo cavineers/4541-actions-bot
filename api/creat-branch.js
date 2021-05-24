@@ -29,6 +29,7 @@ class Branches {
                 console.error(error);
                 core.error(error);
             });
+            console.log(branch);
             const lastCommitSHA = branch.object.sha;
             const { data: { tree }, } = yield this.GitHub.octokit
                 .request('GET /repos/{owner}/{repo}/git/commits/{commit_sha}', Object.assign(Object.assign({}, GitHub_1.GitHubRepository.getRepo()), { commit_sha: lastCommitSHA }))

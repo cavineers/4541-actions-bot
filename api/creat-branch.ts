@@ -37,6 +37,7 @@ export class Branches {
                 core.error(error);
             });
 
+        console.log(branch)
         const lastCommitSHA = branch.object.sha;
 
         // Get most recent commit on master.
@@ -65,7 +66,7 @@ export class Branches {
                 base_tree: lastTreeSHA,
                 tree: [
                     {
-                        //! More params might be needed!
+                        //! More params might be needed.
                         mode: 100644,
                     },
                 ],
