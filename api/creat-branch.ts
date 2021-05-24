@@ -24,9 +24,10 @@ export class Branches {
     }
 
     public static async createNewCommit(message: string) {
+        // Retrieve data on entire repository.
         const {
             // @ts-ignore
-            data: { default_branch },
+            data: { default_branch, branch },
         } = await this.GitHub.octokit
             .request(`GET /repos/{owner}/{repo}`, {
                 ...GitHubRepository.getRepo(),
@@ -36,39 +37,67 @@ export class Branches {
                 core.error(error);
             });
 
+        const lastCommitSHA = branch.object.sha;
+
+        // Get most recent commit on master.
         const {
             // @ts-ignore
-            data: { object },
+            data: { tree },
         } = await this.GitHub.octokit
-            .request('GET /repos/{owner}/{repo}/git/ref/{ref}', {
+            .request('GET /repos/{owner}/{repo}/git/commits/{commit_sha}', {
                 ...GitHubRepository.getRepo(),
-                ref: `heads/${default_branch}`,
+                commit_sha: lastCommitSHA,
             })
             .catch((error: any) => {
                 console.error(error);
                 core.error(error);
             });
 
+        const lastTreeSHA = tree.sha;
+
+        // Create a new tree.
         const {
             // @ts-ignore
             data: { sha },
         } = await this.GitHub.octokit
-            .request('GET /repos/{owner}/{repo}/git/trees/{tree_sha}', {
+            .request('POST /repos/{owner}/{repo}/git/trees', {
                 ...GitHubRepository.getRepo(),
-                tree_sha: object.sha,
+                base_tree: lastTreeSHA,
+                tree: [
+                    {
+                        //! More params might be needed!
+                        mode: 100644,
+                    },
+                ],
             })
             .catch((error: any) => {
                 console.error(error);
                 core.error(error);
             });
 
+        const newTreeSHA = sha;
+
         console.log(sha);
 
-        const msg = await this.GitHub.octokit
+        // Create a new commit.
+        const newCommit = await this.GitHub.octokit
             .request(`POST /repos/{owner}/{repo}/git/commits`, {
                 ...GitHubRepository.getRepo(),
                 message: message,
-                tree: sha,
+                tree: newTreeSHA,
+                parents: [lastCommitSHA],
+            })
+            .catch((error: any) => {
+                console.error(error);
+                core.error(error);
+            });
+
+        // Point new commit to reference.
+        await this.GitHub.octokit
+            .request('PATCH /repos/{owner}/{repo}/git/refs/{ref}', {
+                ...GitHubRepository.getRepo(),
+                ref: `refs/heads/${default_branch}`,
+                sha: (<any>newCommit).sha,
             })
             .catch((error: any) => {
                 console.error(error);
@@ -76,6 +105,6 @@ export class Branches {
             });
 
         // eslint-disable-next-line no-return-await
-        return await (<any>msg).sha;
+        return await (<any>newCommit).sha;
     }
 }
