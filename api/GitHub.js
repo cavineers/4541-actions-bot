@@ -12,6 +12,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GitHubRepository = void 0;
 const github = require("@actions/github");
 class GitHubRepository {
+    constructor(token) {
+        this.octokit = new github.GitHub(token);
+    }
+    getRepoLanguages() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const languages = yield this.octokit.request('GET /repos/{owner}/{repo}/languages', Object.assign({}, GitHubRepository.getRepo()));
+            return languages;
+        });
+    }
     static getIssueContent(token) {
         return __awaiter(this, void 0, void 0, function* () {
             const octokit = new github.GitHub(token);
@@ -30,6 +39,14 @@ class GitHubRepository {
                 title: data.title,
                 body: data.body,
             };
+        });
+    }
+    static getMainSHA(token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const octokit = new github.GitHub(token);
+            const default_branch = yield octokit.request(`GET /repos/{owner}/{repo}`, Object.assign({}, GitHubRepository.getRepo()));
+            const DEFAULT_BRANCH = default_branch;
+            const shaObject = yield octokit.request('GET /repos/{owner}/{repo}/git/ref/{ref}', Object.assign(Object.assign({}, GitHubRepository.getRepo()), { ref: DEFAULT_BRANCH }));
         });
     }
 }

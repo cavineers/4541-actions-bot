@@ -3,6 +3,7 @@
         "Octo",
         "cavineers",
         "octokit",
+        "repos",
         "vercel"
     ]
 }
