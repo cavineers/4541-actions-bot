@@ -105,13 +105,13 @@ export class Branches {
             });
 
         // @ts-ignore
-        console.log(newCommit.sha);
+        console.log(newCommit);
         // Point new commit to reference.
         await this.GitHub.octokit
             .request('PATCH /repos/{owner}/{repo}/git/refs/{ref}', {
                 ...GitHubRepository.getRepo(),
                 ref: `heads/${default_branch}`,
-                sha: (<any>newCommit).sha,
+                sha: newCommit,
             })
             .catch((error: any) => {
                 console.error(error);
