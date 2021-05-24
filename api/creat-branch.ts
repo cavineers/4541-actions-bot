@@ -91,8 +91,6 @@ export class Branches {
 
         const newTreeSHA = sha;
 
-        console.log(sha);
-
         // Create a new commit.
         const newCommit = await this.GitHub.octokit
             .request(`POST /repos/{owner}/{repo}/git/commits`, {
@@ -106,11 +104,13 @@ export class Branches {
                 core.error(error);
             });
 
+        // @ts-ignore
+        console.log(newCommit.sha);
         // Point new commit to reference.
         await this.GitHub.octokit
             .request('PATCH /repos/{owner}/{repo}/git/refs/{ref}', {
                 ...GitHubRepository.getRepo(),
-                ref: `refs/heads/${default_branch}`,
+                ref: `heads/${default_branch}`,
                 sha: (<any>newCommit).sha,
             })
             .catch((error: any) => {
