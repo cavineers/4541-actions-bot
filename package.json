@@ -8,10 +8,7 @@
         "dev": "tsc --watch",
         "test": "jest"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/cavineers/4541-actions-bot.git"
-    },
+    "repository": "git+https://github.com/cavineers/4541-actions-bot.git",
     "author": "Ryan Bode",
     "license": "Apache-2.0",
     "bugs": {
@@ -39,7 +36,7 @@
         "eslint-plugin-react": "^7.23.2",
         "jest": "^27.0.4",
         "prettier": "^2.3.0",
-        "ts-jest": "^26.5.6",
+        "ts-jest": "^27.0.2",
         "typescript": "^4.2.4"
     }
 }
